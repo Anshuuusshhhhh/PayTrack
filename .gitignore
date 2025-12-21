@@ -1,0 +1,18 @@
+# Node
+node_modules/
+npm-debug.log*
+dist/
+build/
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
