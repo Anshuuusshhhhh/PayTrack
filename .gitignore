@@ -4,6 +4,12 @@ npm-debug.log*
 dist/
 build/
 
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+
 # Python
 __pycache__/
 *.pyc
@@ -16,3 +22,17 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+yarn-debug.log*
+yarn-error.log*
