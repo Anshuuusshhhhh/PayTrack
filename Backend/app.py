@@ -4,7 +4,6 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from datetime import datetime
 from sqlalchemy import func
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 
@@ -24,8 +23,8 @@ jwt = JWTManager(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False) # In real life, hash this!
-    balance = db.Column(db.Float, nullable=False, server_default="1000")
+    password = db.Column(db.String(120), nullable=False) # In real life, hash this!
+    balance = db.Column(db.Float, nullable=False, default="1000")
 
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -51,8 +50,7 @@ def register():
         return jsonify({"msg": "Username already exists"}), 400
     
     # Create new user with a 'Welcome Bonus'
-    hashed_password = generate_password_hash(password)
-    new_user = User(username=username, password=hashed_password)
+    new_user = User(username=username, password=password, balance = 1000)
     db.session.add(new_user)
     db.session.commit()
     
@@ -63,7 +61,7 @@ def login():
     data = request.json
     # Simple check (In real life, verify hash)
     user = User.query.filter_by(username=data['username']).first()
-    if user and check_password_hash(user.password, data['password']):
+    if user and user.password == data['password']:
         token = create_access_token(identity=str(user.id))
         return jsonify(access_token=token)
     return jsonify({"msg": "Bad credentials"}), 401
